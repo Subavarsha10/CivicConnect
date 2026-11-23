@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CivicConnect | Smart City Portal</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .navbar {
+            background: white;
+            padding: 16px 0;
+        }
+
+        .brand {
+            color: #147d64;
+            font-size: 25px;
+            font-weight: 750;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #103f39, #147d64);
+            color: white;
+            padding: 105px 0;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 750;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #e0f2ec;
+            max-width: 580px;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #123f37;
+        }
+
+        .service-card {
+            border: 0;
+            border-radius: 14px;
+            padding: 25px;
+            height: 100%;
+            transition: 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 35px;
+        }
+
+        .step-number {
+            background: #d1fae5;
+            color: #147d64;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin: auto auto 18px;
+        }
+
+        footer {
+            background: #102e2a;
+            color: white;
+            padding: 35px 0;
+        }
+
+        .btn-green {
+            background: #147d64;
+            color: white;
+            border: none;
+        }
+
+        .btn-green:hover {
+            background: #0e6652;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav class="navbar navbar-expand-lg shadow-sm sticky-top">
+    <div class="container">
+
+        <a class="navbar-brand brand" href="/">CivicConnect.</a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#home">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#how-it-works">How It Works</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-outline-success px-4"
+                       href="{% url 'login' %}">
+                        Login
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-green px-4"
+                       href="{% url 'register' %}">
+                        Register
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- HERO SECTION -->
+<section class="hero" id="home">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <span class="badge bg-light text-success mb-3 p-2">
+                    SMART CITY INITIATIVE
+                </span>
+
+                <h1>
+                    Building Better Cities,
+                    Together.
+                </h1>
+
+                <p class="mt-4">
+                    CivicConnect provides a simple digital platform
+                    for citizens to report civic issues, track
+                    complaints and connect with municipal authorities.
+                </p>
+
+                <div class="mt-4 d-flex flex-wrap gap-3">
+
+                    <a href="{% url 'register' %}"
+                       class="btn btn-light btn-lg text-success fw-semibold">
+                        Report an Issue
+                    </a>
+
+                    <a href="{% url 'login' %}"
+                       class="btn btn-outline-light btn-lg">
+                        Track Complaint
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 text-center mt-5 mt-lg-0">
+                <div style="font-size: 125px;">🏙️</div>
+                <h4>Smart Governance</h4>
+                <p class="text-white-50">
+                    Transparent. Accountable. Connected.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ABOUT SECTION -->
+<section class="py-5" id="about">
+    <div class="container py-4 text-center">
+
+        <h2 class="section-title">About CivicConnect</h2>
+
+        <p class="text-muted mt-3 mx-auto" style="max-width: 750px;">
+            CivicConnect is a centralized municipal grievance
+            redressal platform designed to improve communication
+            between citizens and municipal authorities.
+
+            It enables citizens to report civic problems while
+            helping municipal departments monitor, manage and
+            resolve complaints efficiently.
+        </p>
+
+    </div>
+</section>
+
+
+<!-- SERVICES SECTION -->
+<section class="py-5 bg-white" id="services">
+    <div class="container py-4">
+
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Municipal Services</h2>
+            <p class="text-muted">
+                Report issues across important civic departments.
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card shadow-sm">
+                    <div class="service-icon">🗑️</div>
+                    <h5 class="mt-3">Sanitation & Waste</h5>
+                    <p class="text-muted">
+                        Report garbage accumulation,
+                        waste disposal and sanitation problems.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card shadow-sm">
+                    <div class="service-icon">🛣️</div>
+                    <h5 class="mt-3">Roads & Bridges</h5>
+                    <p class="text-muted">
+                        Report damaged roads, potholes
+                        and infrastructure problems.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card shadow-sm">
+                    <div class="service-icon">💧</div>
+                    <h5 class="mt-3">Water Supply</h5>
+                    <p class="text-muted">
+                        Report water leakage, supply
+                        interruptions and drainage issues.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card shadow-sm">
+                    <div class="service-icon">💡</div>
+                    <h5 class="mt-3">Electricals</h5>
+                    <p class="text-muted">
+                        Report streetlight failures
+                        and electrical infrastructure issues.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section class="py-5" id="how-it-works">
+    <div class="container py-4">
+
+        <div class="text-center mb-5">
+            <h2 class="section-title">How It Works</h2>
+            <p class="text-muted">
+                Three simple steps to make your city better.
+            </p>
+        </div>
+
+        <div class="row text-center g-4">
+
+            <div class="col-md-4">
+                <div class="step-number">1</div>
+                <h5>Register</h5>
+                <p class="text-muted">
+                    Create your citizen account
+                    on CivicConnect.
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <div class="step-number">2</div>
+                <h5>Submit Complaint</h5>
+                <p class="text-muted">
+                    Select a department and
+                    report your civic issue.
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <div class="step-number">3</div>
+                <h5>Track Resolution</h5>
+                <p class="text-muted">
+                    Monitor complaint progress
+                    and receive status updates.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- CALL TO ACTION -->
+<section class="py-5 bg-success text-white text-center">
+    <div class="container py-3">
+
+        <h2>Be a Part of a Better City</h2>
+
+        <p class="mt-3">
+            Your voice matters. Report civic issues and
+            help improve your community.
+        </p>
+
+        <a href="{% url 'register' %}"
+           class="btn btn-light text-success fw-semibold mt-3 px-4">
+            Get Started
+        </a>
+
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+    <div class="container text-center">
+
+        <h4>CivicConnect</h4>
+
+        <p class="text-white-50">
+            Smart City Municipal Grievance & Civic Portal
+        </p>
+
+        <hr>
+
+        <small>
+            © 2026 CivicConnect. All Rights Reserved.
+            <br>
+            Developed as a Smart City Portal Project.
+        </small>
+
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

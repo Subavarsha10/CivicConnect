@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Submit Complaint | CivicConnect</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f1f5f9;
+        }
+
+        .form-card {
+            max-width: 750px;
+            margin: 45px auto;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .heading {
+            color: #147d64;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-success px-4">
+    <a href="{% url 'citizen_dashboard' %}" class="navbar-brand">
+        CivicConnect
+    </a>
+
+    <a href="{% url 'citizen_dashboard' %}" class="btn btn-light btn-sm">
+        Dashboard
+    </a>
+</nav>
+
+<div class="container">
+
+    <div class="card form-card shadow-sm p-4 p-md-5">
+
+        <h2 class="heading">Submit a Complaint</h2>
+
+        <p class="text-muted">
+            Provide the details of your civic issue below.
+        </p>
+
+        {% for message in messages %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="mb-3">
+
+                    <label class="form-label fw-semibold">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-success w-100 mt-3">
+                Submit Complaint
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const departmentSelect = document.getElementById("id_department");
+    const categorySelect = document.getElementById("id_category");
+
+    const categoryUrl = "{% url 'api_category_list' %}";
+
+    async function loadCategories(departmentId, selectedCategory = "") {
+
+        categorySelect.innerHTML = '<option value="">Loading categories...</option>';
+        categorySelect.disabled = true;
+
+        if (!departmentId) {
+            categorySelect.innerHTML = '<option value="">Select a department first</option>';
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `${categoryUrl}?department=${encodeURIComponent(departmentId)}`
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to fetch categories");
+            }
+
+            const data = await response.json();
+
+            categorySelect.innerHTML = '<option value="">Select a category</option>';
+
+            data.forEach(function (category) {
+                const option = document.createElement("option");
+
+                option.value = category.id;
+                option.textContent = category.name;
+
+                if (String(category.id) === String(selectedCategory)) {
+                    option.selected = true;
+                }
+
+                categorySelect.appendChild(option);
+            });
+
+            if (data.length === 0) {
+                categorySelect.innerHTML = '<option value="">No categories available</option>';
+            }
+
+            categorySelect.disabled = false;
+
+        } catch (error) {
+            console.error(error);
+            categorySelect.innerHTML = '<option value="">Error loading categories</option>';
+        }
+    }
+
+    departmentSelect.addEventListener("change", function () {
+        loadCategories(this.value);
+    });
+
+    // Load the relevant categories when the page opens.
+    if (departmentSelect.value) {
+        loadCategories(departmentSelect.value, categorySelect.value);
+    } else {
+        categorySelect.innerHTML = '<option value="">Select a department first</option>';
+        categorySelect.disabled = true;
+    }
+
+});
+</script>
+
+</body>
+</html>

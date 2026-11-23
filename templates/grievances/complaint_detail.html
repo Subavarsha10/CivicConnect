@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Complaint Details | CivicConnect</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f1f5f9;
+        }
+
+        .heading {
+            color: #147d64;
+            font-weight: 700;
+        }
+
+        .detail-card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .history-item {
+            border-left: 3px solid #198754;
+            padding-left: 18px;
+            margin-bottom: 25px;
+        }
+
+        .status-badge {
+            font-size: 14px;
+            padding: 8px 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-success px-4">
+    <a href="{% url 'citizen_dashboard' %}" class="navbar-brand">
+        CivicConnect
+    </a>
+
+    <a href="{% url 'citizen_dashboard' %}" class="btn btn-light btn-sm">
+        Back to Dashboard
+    </a>
+</nav>
+
+<div class="container py-5">
+
+    <h2 class="heading mb-4">Complaint Tracking</h2>
+
+    {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    <!-- Complaint Information -->
+    <div class="card detail-card shadow-sm p-4 mb-4">
+
+        <h4>{{ grievance.title }}</h4>
+
+        <p class="text-muted">
+            Complaint ID:
+            <strong>{{ grievance.complaint_id }}</strong>
+        </p>
+
+        <hr>
+
+        <p><strong>Department:</strong> {{ grievance.department.name }}</p>
+        <p><strong>Category:</strong> {{ grievance.category.name }}</p>
+        <p><strong>Description:</strong> {{ grievance.description }}</p>
+        <p><strong>Address:</strong> {{ grievance.address }}</p>
+        <p><strong>Priority:</strong> {{ grievance.get_priority_display }}</p>
+
+        <p>
+            <strong>Current Status:</strong>
+            <span class="badge bg-success status-badge">
+                {{ grievance.get_status_display }}
+            </span>
+        </p>
+
+        <p>
+            <strong>Submitted On:</strong>
+            {{ grievance.created_at|date:"d M Y, h:i A" }}
+        </p>
+
+        {% if grievance.photograph %}
+            <hr>
+            <h6>Complaint Photograph</h6>
+
+            <a href="{{ grievance.photograph.url }}" target="_blank">
+                <img src="{{ grievance.photograph.url }}"
+                     class="img-fluid rounded"
+                     style="max-height:300px;"
+                     alt="Complaint photograph">
+            </a>
+        {% endif %}
+
+        {% if grievance.resolution_remarks %}
+            <hr>
+            <h5 class="text-success">Manager's Remarks</h5>
+            <p>{{ grievance.resolution_remarks }}</p>
+        {% endif %}
+
+    </div>
+
+    <!-- Status History -->
+    <div class="card detail-card shadow-sm p-4 mb-4">
+
+        <h4 class="mb-4">Complaint Status History</h4>
+
+        {% for item in history %}
+
+            <div class="history-item">
+
+                <h6 class="fw-bold text-success">
+                    {{ item.new_status|title }}
+                </h6>
+
+                <p class="text-muted small mb-1">
+                    {{ item.changed_at|date:"d M Y, h:i A" }}
+                </p>
+
+                {% if item.previous_status %}
+                    <p class="small mb-1">
+                        Previous Status: {{ item.previous_status|title }}
+                    </p>
+                {% endif %}
+
+                {% if item.remarks %}
+                    <p class="mb-0">{{ item.remarks }}</p>
+                {% endif %}
+
+                {% if item.changed_by %}
+                    <small class="text-muted">
+                        Updated by: {{ item.changed_by.username }}
+                    </small>
+                {% endif %}
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-muted">No status history available.</p>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- Citizen Feedback -->
+    {% if grievance.status == 'resolved' or grievance.status == 'closed' %}
+
+        <div class="card detail-card shadow-sm p-4">
+
+            <h4 class="mb-3">Citizen Feedback</h4>
+
+            {% if feedback %}
+
+                <div class="alert alert-success">
+                    Thank you! Your feedback has been submitted.
+                </div>
+
+                <p><strong>Rating:</strong> {{ feedback.rating }}/5</p>
+                <p><strong>Comments:</strong> {{ feedback.comments|default:"No comments provided." }}</p>
+
+            {% else %}
+
+                <p class="text-muted">
+                    Your complaint has been resolved. Please share your feedback.
+                </p>
+
+                <form method="POST"
+                      action="{% url 'submit_feedback' grievance.pk %}">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Rate the resolution
+                        </label>
+
+                        <select name="rating" class="form-select" required>
+                            <option value="">Select rating</option>
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Good</option>
+                            <option value="3">3 - Average</option>
+                            <option value="2">2 - Poor</option>
+                            <option value="1">1 - Very Poor</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Comments
+                        </label>
+
+                        <textarea name="comments"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Share your experience..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        Submit Feedback
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
